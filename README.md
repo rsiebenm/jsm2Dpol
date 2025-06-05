@@ -1,8 +1,8 @@
 # JSM2DPOL
 
-Computes dust cross-sections, extinction, and polarised emission based on the three-component model by  
+Computes extinction, emission and polarisation of the three-component dust model by  
 [Siebenmorgen R. (2023, A&A, 670A, 115)](https://arxiv.org/abs/2211.10146). Relative masses are derived from dust abundances and size distributions.  
-The subroutine `sigtDark_EbvAvPol` computes the cross-sections ($cm^2/g$ ISM dust) and the relative mass of submicron-sized grains.
+The subroutine `sigtDark_EbvAvPol` computes the cross-sections ($cm^2/g$ ISM dust) and the relative mass of submicron-sized grains, also called "dark dust".
 
 ---
 
@@ -18,23 +18,26 @@ The subroutine `sigtDark_EbvAvPol` computes the cross-sections ($cm^2/g$ ISM dus
 1. **Nano-particles (VSG)**  
    - Graphite + PAHs (2175 Å bump, far-UV reddening)  
    - Nano-silicates (far-UV)
+   - mid IR continuum emission and PAH bands
 
 2. **Large grains**  
    - Prolate ($a/b > 1$), aligned (IDG model) or PDG (set via d.Q files)
    - Optical constants:  
-     - aSi: [Demyk et al. (2022)](https://arxiv.org/abs/2209.06513)  
-     - aC: [Zubko (1996)](https://ui.adsabs.harvard.edu/abs/1996MNRAS.282.1321Z/abstract)  
-   - Radii: 6–260 nm ([Mathis et al., 1977](https://ui.adsabs.harvard.edu/abs/1977ApJ...217..425M/abstract))
+     - aSi: amorphous silicates [Demyk et al. (2022)](https://arxiv.org/abs/2209.06513)  
+     - aC: amorp[hous carbon [Zubko (1996)](https://ui.adsabs.harvard.edu/abs/1996MNRAS.282.1321Z/abstract)  
+   - Radii: 6–250 nm ([Mathis et al., 1977](https://ui.adsabs.harvard.edu/abs/1977ApJ...217..425M/abstract))
+   - Grey extinction in the far UV and about linear decline in the optical, far IR emission
 
 3. **Submicron-sized grains (Dark Dust)**  
-   - Fluffy spheres: 20% aC, 30% Si, 50% vacuum  
-   - Radii: 260 nm – 3 µm
-
+   - Fluffy (10% vacuum) composites of aC and aSi grains 
+   - Radii: 250 nm - 3 µm
+   - Grey extinction in the optical and about linear decline in the IR, submillimetre emission
+   
 ---
 
 ## 📥 Input Files (in `./Input/`)
 
-- `d.Q*` files: Efficiency Q data for grain types computed using the Bruggeman mixing rule for porosity treated as vaccuum inclusion, e.g.: 
+- `d.Q*` files: Efficiency Q data for grain types, using the Bruggeman mixing rule when needed, e.g. for vacuum inclusion (porosity) 
   - `d.QellipaC`  
   - `d.QellipSi`  
   - `d.QellipDark`
@@ -52,7 +55,7 @@ The subroutine `sigtDark_EbvAvPol` computes the cross-sections ($cm^2/g$ ISM dus
   - Abundances: `abuc`, `abusi`, `abuvsi`, `abucvgr`, `abucpahs`
   - Sizes: `qmrn`, `alec`, `alesi`, `arad_polmin_aC`, `arad_polmin_Si`, `arad_polmax`, `aled`
 
-- `PAH2170.wq`:
+- `PAH2170.wq`:  Drude Parameters (x0 (mic) and gamma) of PAH contributons to the 2175AA bump
 
 ---
 
@@ -62,8 +65,9 @@ The subroutine `sigtDark_EbvAvPol` computes the cross-sections ($cm^2/g$ ISM dus
 - `Kappa4fit.out`: Observational wavelength range  
 - `PolKappa.out`: Polarised cross-sections (`sigp_*`, dark dust set to zero)  
 - `tau4fit.out`: Extinction/reddening curves (absolute and normalized)
-- `emis.out`: 
-- `emipol.out`:
+- `emis.out`: Flux in [erg/s/Hz/ster] pro g IM as a function of wavelength for total and the indiviudal dust component
+- `emipol.out`: Polarised and total flux in [erg/s/Hz/ster] pro g IM as a function of wavelength. Total flux emis, total polarised flux
+  and polarised flux of aC, aSi and dark dust components
 
 ---
 
